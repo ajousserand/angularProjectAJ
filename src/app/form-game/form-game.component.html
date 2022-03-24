@@ -1,0 +1,89 @@
+
+<form [formGroup]="formGame" class="col-6 mx-auto">
+  <div class="mt-2">
+    <label class="form-label">Nom</label>
+    <input  formControlName="_name"
+            name="gameName"
+            type="text"
+            class="form-control"
+            placeholder="Nom"
+            [class.is-invalid]="(name.invalid || nameExists) && name.touched"
+            [class.is-valid]="name.valid && name.touched"
+    >
+    <div *ngIf="(name.invalid || nameExists) && (name.touched || name.dirty)">
+      <div *ngIf="name.errors?.required" class="text-danger">
+        Le nom est obligatoire
+      </div>
+      <div *ngIf="nameExists" class="text-danger">
+        Ce jeu existe déjà
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-2">
+    <label class="form-label">Image</label>
+    <input  formControlName="_thumbnailCover"
+            name="gameThumbnailCover"
+            type="text"
+            class="form-control"
+            placeholder="ThumbnailCover"
+            [class.is-invalid]="thumbnailCover.invalid && thumbnailCover.touched"
+            [class.is-valid]="thumbnailCover.valid && thumbnailCover.touched"
+    >
+    <div *ngIf="thumbnailCover.invalid && (thumbnailCover.touched || thumbnailCover.dirty)">
+      <div *ngIf="thumbnailCover.errors?.required" class="text-danger">
+        Le thumbnailCover est obligatoire
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-2">
+    <label class="form-label">Langue</label>
+    <select formControlName="_language"
+            name="gameLanguage"
+            class="form-control"
+    >
+      <option *ngFor="let language of languages" [ngValue]="language">
+        {{ language.name }}
+      </option>
+    </select>
+  </div>
+
+<!-- /!\ formArrayName au lieu de formControlName -->
+  <div formArrayName="_genres">
+    <div *ngFor="let _genre of genres.controls; index as indexFormControl">
+      <label>Genre #{{indexFormControl + 1}}</label>
+      <div class="input-group my-2">
+        <select [formControlName]="indexFormControl"
+                name="gameGenre"
+                class="form-control"
+        >
+          <option *ngFor="let genre of arrayGenres" [ngValue]="genre">
+            {{ genre.name }}
+          </option>
+        </select>
+        <span class="input-group-btn">
+            <button type="button"
+                    (click)="addNameField()"
+                    class="btn btn-success"
+            >
+              +
+            </button>
+            <button type="button"
+                    (click)="deleteNameField(indexFormControl)"
+                    class="btn btn-danger"
+            >
+              -
+            </button>
+          </span>
+      </div>
+    </div>
+  </div>
+
+  <button [disabled]="formGame.invalid"
+          class="btn btn-steamish mt-2"
+          (click)="submit()"
+  >
+    Créer
+  </button>
+</form>

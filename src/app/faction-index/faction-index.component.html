@@ -1,0 +1,28 @@
+
+<div *ngIf="factionService.arrayFactions.length > 0; else noFaction">
+  <div class="row my-3">
+    <div class="col-lg-4 col-md-6 card-faction"
+         *ngFor="let faction of factionService.arrayFactions"
+         (click)="selectedFaction = faction"
+    >
+      <!-- permet de changer dynamiquement la color de la police -->
+      <h3 [ngStyle]="{'color': faction.color}">
+        {{ faction.name }}
+      </h3>
+      <div class="container-image">
+        <img [src]="faction.image" [alt]="faction.name">
+      </div>
+      <!-- équivalent au src="{{ faction.image }}" -->
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <app-faction-detail [faction]="selectedFaction"></app-faction-detail>
+  </div>
+</div>
+
+<ng-template #noFaction>
+  <p>
+    Aucune faction n'a a été trouvé
+  </p>
+</ng-template>
